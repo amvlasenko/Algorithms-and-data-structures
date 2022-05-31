@@ -1,36 +1,31 @@
-! Copyright 2015 Fyodorov S. A.
-
 module Group_IO
    use Environment
 
    implicit none
    integer, parameter :: SURNAME_LEN   = 15
    integer, parameter :: INITIALS_LEN  = 5
-   integer, parameter :: MARKS_AMOUNT  = 5
 
    ! Структура данных для хранения данных о студенте.
    type student
-      character(SURNAME_LEN, kind=CH_)    :: Surname              = ""
-      character(INITIALS_LEN, kind=CH_)   :: Initials             = ""
-      character(kind=CH_)                 :: Sex                  = ""
-      integer                             :: Marks(MARKS_AMOUNT)  = 0
-      real(R_)                            :: Aver_Mark            = 0
-      type(student), pointer              :: next                 => Null()
+      character(SURNAME_LEN, kind=CH_)    :: Surname = ""
+      character(INITIALS_LEN, kind=CH_)   :: Initials = ""
+      integer(I_)                         :: Year = 0
+      character(kind=CH_)                 :: Registration = ""
+      character(kind=CH_)                 :: Gender = ""
+      type(student), pointer              :: next => Null()
    end type student
-
+   
 contains
    ! Чтение списка класса: фамилии, инициалы, полы и оценки.
-   function Read_class_list(Input_File) result(Class_List)
-      type(student), pointer     :: Class_List
-      character(*), intent(in)   :: Input_File
-      integer  In
-
+   function Read_class_list(Input_File) result(Group)
+      type(student), pointer              :: Group
+      character(*), intent(in)            :: Input_File
+      integer In
       open (file=Input_File, encoding=E_, newunit=In)
-         Class_List => Read_student(In)
+         Group => Read_student(In)
       close (In)
    end function Read_class_list
 
-   ! Чтение следующего студента.
    recursive function Read_student(In) result(Stud)
       type(student), pointer  :: Stud
       integer, intent(in)     :: In
@@ -38,8 +33,9 @@ contains
       character(:), allocatable  :: format
       
       allocate (Stud)
-      format = '(3(a, 1x), ' // MARKS_AMOUNT // 'i1, f5.2)'
-      read (In, format, iostat=IO) stud%Surname, stud%Initials, stud%Sex, stud%Marks, stud%Aver_Mark
+      format = '(2(a, 1x), i4, 1x, a, 1x, a)'
+      read (In, format, iostat=IO) Stud%Surname, Stud%Initials, Stud%Year, &
+      Stud%Registration, Stud%Gender
       call Handle_IO_status(IO, "reading line from file")
       if (IO == 0) then
           Stud%next => Read_student(In)
@@ -48,30 +44,40 @@ contains
          nullify (Stud)
       end if
    end function Read_student
-
-   ! Вывод списка класса со средним баллом или без него.
-   subroutine Output_class_list(Output_File, Class_List, List_Name, Position)
-      character(*), intent(in)   :: Output_File, Position, List_Name
-      type(student), intent(in)  :: Class_List
-      integer  :: Out
+ 
+   ! Вывод списка класса.
+   subroutine Output_class_list(Output_File, Group, List_name, Position, count)
+      character(*), intent(in)   :: Output_File, Position, List_name
+      type(student), intent(in)  :: Group
+      integer                    :: count
+      integer                    :: Out
       
       open (file=Output_File, encoding=E_, position=Position, newunit=Out)
          write (out, '(/a)') List_Name
-         call Output_student(Out, Class_List)
+         call Output_student(Out, Group, count)
       close (Out)
    end subroutine Output_class_list
-
-   recursive subroutine Output_student(Out, Stud)
+   
+   recursive subroutine Output_student(Out, Stud, count)
       integer, intent(in)        :: Out
       type(student), intent(in)  :: Stud
-      
-      integer  :: IO
+      integer  :: IO, count, acc = 0
       character(:), allocatable  :: format
-
-      format = '(3(a, 1x), ' // MARKS_AMOUNT // 'i1, f5.2)'
-      write (Out, format, iostat=IO) Stud%Surname, Stud%Initials, Stud%Sex, Stud%Marks, Stud%Aver_Mark
+      acc = acc + 1
+      format = '(2(a, 1x), i4, 1x, a, 1x, a)'
+      write (Out, format, iostat=IO) Stud%Surname, Stud%Initials, Stud%Year, &
+      Stud%Registration, Stud%Gender
       call Handle_IO_status(IO, "writing student")
-      if (Associated(Stud%next)) &
-         call Output_student(Out, Stud%next)
+      if (Associated(Stud%next)) then
+         if (count == 0) then 
+            call Output_student(Out, Stud%next, count)
+         else if (acc < count) then
+           
+            call Output_student(Out, Stud%next, count)
+         end if 
+      else 
+         acc = 0
+      
+      end if
    end subroutine Output_student
 end module Group_IO 

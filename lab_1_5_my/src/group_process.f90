@@ -1,39 +1,31 @@
-! Copyright 2015 Fyodorov S. A.
-
 module Group_Process
-   ! Модуль с ЧИСТЫМИ процедурами обработки данных.
    use Environment
    use Group_IO
 
    implicit none
-
+   
 contains
-   ! Получение списков по полу.
-   pure recursive subroutine Get_list_by_gender(Stud, List, Amount, Gender)
-      type(student), intent(in)        :: Stud
-      type(student), pointer           :: List
-      integer(I_), intent(inout)       :: Amount
-      character(kind=CH_), intent(in)  :: Gender
-     
-      ! Если найден студент нужного пола, то размещаем в новом списке элемент и копируем его данные.
-      if (Stud%Sex == Gender) then
-         allocate (List, source=Stud)
-         Amount = Amount + 1
-         List%Aver_Mark = Real(Sum(List%Marks), R_) / MARKS_AMOUNT
-         List%next => Null()
-         ! Если ещё остались студенты, сканируем дальше, а в создаваемом списке передаём место СОСЕДА.
-         if (Associated(Stud%next)) &
-            call Get_list_by_gender(Stud%next, List%next, Amount, Gender)
-      ! Если ещё остались студенты, сканируем дальше, а в создаваемом списке передаём ПРЕЖНЕЕ место.
-      else if (Associated(Stud%next)) then
-         call Get_list_by_gender(Stud%next, List, Amount, Gender)
-	  else
-	     List => Null()
+   
+   pure recursive subroutine Get_SPB_Boys(Group, Boys_From_SPB, amount)
+      type(student), intent(in)        :: Group
+      type(student), pointer           :: Boys_From_SPB
+      character(kind=CH_), parameter   :: MALE = Char(1052, CH_), REG = Char(1055, CH_)
+      integer, intent(inout)           :: amount
+
+      if (Group%Gender == MALE .AND. Group%Registration == REG) then
+         allocate (Boys_From_SPB, source=Group)
+         amount = amount + 1
+         Boys_From_SPB%next => Null()
+         if (Associated(Group%next)) &
+            call Get_SPB_Boys(Group%next, Boys_From_SPB%next, amount)
+         else if (Associated(Group%next)) then
+            call Get_SPB_Boys(Group%next, Boys_From_SPB, amount)
+         else
+            Boys_From_SPB => Null()
       end if
 
-   end subroutine Get_list_by_gender
- 
-   ! Сортировка списка класса по среднему баллу рекурсивно методом пузырька.
+   end subroutine
+
    pure recursive subroutine Sort_class_list(ClassList, N)
       type(student), pointer, intent(inout)  :: ClassList
       integer, intent(in)                    :: N
@@ -42,14 +34,14 @@ contains
       call Drop_down(ClassList, 1, N-1)
       
       ! Если необходимо, делаем то же с первыми N-1 элементами.
-      if (N >= 3) &
+      if (N >= 11) &
          call Sort_class_list(ClassList, N-1)
    end subroutine Sort_class_list
 
    ! Помещаем c j-ой на N-ую позицию менее успешного, поочерёдно сравнивая.
    pure recursive subroutine Drop_down(ClassList, j, N)
       type(student), pointer  :: ClassList
-      integer, intent(in)                    :: j, N
+      integer, intent(in)                  :: j, N
 
       ! Если требуется, то меняем местами текущего студента со следующим.
       if (Swap(ClassList)) &
@@ -63,9 +55,9 @@ contains
       type(student), intent(in)  :: Current
 
       Swap = .false.
-      if (Current%Aver_Mark < Current%next%Aver_Mark) then
+      if (Current%Year < Current%next%Year) then
          Swap = .true.
-      else if (Current%Aver_Mark == Current%next%Aver_Mark) then
+      else if (Current%Year == Current%next%Year) then
          if (Current%Surname > Current%next%Surname) then
             Swap = .true.
          else if (Current%Surname==Current%next%Surname .and. Current%Initials>Current%next%Initials) then
@@ -86,4 +78,4 @@ contains
       Current        => tmp_stud
    end subroutine Swap_from_current
 
-end module Group_process
+end module group_process
