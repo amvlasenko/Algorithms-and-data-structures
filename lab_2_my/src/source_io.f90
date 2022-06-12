@@ -33,16 +33,16 @@ contains
 
       read (In, "(a)", iostat=IO) input_string
       call Handle_IO_status(IO, "read character")
-
+      !Не нужен
       new_string = Trim(input_string)
-
+      !Лентрим
       lenght_string = len(new_string)
-      index = 1
+      !index = 1
 
       print *, new_string
-
-      if ( lenght_string >= index) then
-         str => Create_String_List(new_string, index, lenght_string)
+      
+      if ( lenght_string >= 1) then
+         str => Create_String_List(new_string, 1, lenght_string)
       else
          str => Null()
       end if
@@ -51,7 +51,7 @@ contains
    ! Рекурсивное чтение исходной строки и перевод ее в модель String
    recursive function Create_String_List(input_str, index, count) result(str)
       character(*, kind=CH_), intent(in)      :: input_str
-      integer(I_), intent(inout)              :: index
+      integer(I_), intent(in)              :: index
       integer(I_), intent(in)                 :: count
       type(SourceLine), pointer               :: str
       
@@ -59,16 +59,16 @@ contains
 
       str%char = input_str(index:index)
       str%next => Null()
-
-      index = index + 1
+      
+      !index = index + 1
 
       if ( index <= count ) &
-         str%next => Create_String_List(input_str, index, count)
+         str%next => Create_String_List(input_str, index+1, count)
    end function Create_String_List
 
    recursive subroutine Print_Str(Str)
       type(SourceLine), pointer :: str
-
+      !advance = no Строка будет выводиться без перевода каретки
       write(*, *) str%char
       if (associated(str%next)) &
          call Print_Str(str%next)

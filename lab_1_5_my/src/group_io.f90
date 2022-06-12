@@ -5,7 +5,6 @@ module Group_IO
    integer, parameter :: SURNAME_LEN   = 15
    integer, parameter :: INITIALS_LEN  = 5
 
-   ! Структура данных для хранения данных о студенте.
    type student
       character(SURNAME_LEN, kind=CH_)    :: Surname = ""
       character(INITIALS_LEN, kind=CH_)   :: Initials = ""
@@ -16,7 +15,6 @@ module Group_IO
    end type student
    
 contains
-   ! Чтение списка класса: фамилии, инициалы, полы и оценки.
    function Read_class_list(Input_File) result(Group)
       type(student), pointer              :: Group
       character(*), intent(in)            :: Input_File
@@ -46,38 +44,34 @@ contains
    end function Read_student
  
    ! Вывод списка класса.
-   subroutine Output_class_list(Output_File, Group, List_name, Position, count)
-      character(*), intent(in)   :: Output_File, Position, List_name
+   subroutine Output_class_list(Output_File, Group, Position, List_name)
+      character(*), intent(in)   :: Output_File, Position
+      character(*), optional, intent(in) :: List_name
       type(student), intent(in)  :: Group
-      integer                    :: count
       integer                    :: Out
       
       open (file=Output_File, encoding=E_, position=Position, newunit=Out)
+      if(present(List_name)) then
          write (out, '(/a)') List_Name
-         call Output_student(Out, Group, count)
+      end if
+         call Output_student(Out, Group)
       close (Out)
    end subroutine Output_class_list
    
-   recursive subroutine Output_student(Out, Stud, count)
+   recursive subroutine Output_student(Out, Stud)
       integer, intent(in)        :: Out
       type(student), intent(in)  :: Stud
-      integer  :: IO, count, acc = 0
+      integer  :: IO
       character(:), allocatable  :: format
-      acc = acc + 1
+   
+      
       format = '(2(a, 1x), i4, 1x, a, 1x, a)'
       write (Out, format, iostat=IO) Stud%Surname, Stud%Initials, Stud%Year, &
       Stud%Registration, Stud%Gender
+      
       call Handle_IO_status(IO, "writing student")
       if (Associated(Stud%next)) then
-         if (count == 0) then 
-            call Output_student(Out, Stud%next, count)
-         else if (acc < count) then
-           
-            call Output_student(Out, Stud%next, count)
-         end if 
-      else 
-         acc = 0
-      
+         call Output_student(Out, Stud%next)
       end if
    end subroutine Output_student
 end module Group_IO 

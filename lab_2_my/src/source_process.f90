@@ -15,6 +15,6 @@ contains
       else if (n%char == h%char) then
          index = KMP(h%next, n%next, i)
       end if
-
+      !Проверять есть ли h, нужна вторая рекурсия чтоб не потерять начало, вторая логическая смотрит все ли ок дальше по слову 
    end function
 end module Source_process

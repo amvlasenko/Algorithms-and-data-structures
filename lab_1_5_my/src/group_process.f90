@@ -25,57 +25,31 @@ contains
       end if
 
    end subroutine
+   
+   !Три ссылки студ_Н, три else if
 
-   pure recursive subroutine Sort_class_list(ClassList, N)
-      type(student), pointer, intent(inout)  :: ClassList
-      integer, intent(in)                    :: N
-
-      ! Работаем только с первыми N элементами: помещаем в ИХ конец менее успешного.
-      call Drop_down(ClassList, 1, N-1)
+   pure recursive subroutine Look_at_youngests(Boys_From_SPB, stud1, stud2, stud3)
+      type(student), pointer, intent(inout)     :: Boys_From_SPB, stud1, stud2, stud3
       
-      ! Если необходимо, делаем то же с первыми N-1 элементами.
-      if (N >= 11) &
-         call Sort_class_list(ClassList, N-1)
-   end subroutine Sort_class_list
-
-   ! Помещаем c j-ой на N-ую позицию менее успешного, поочерёдно сравнивая.
-   pure recursive subroutine Drop_down(ClassList, j, N)
-      type(student), pointer  :: ClassList
-      integer, intent(in)                  :: j, N
-
-      ! Если требуется, то меняем местами текущего студента со следующим.
-      if (Swap(ClassList)) &
-         call Swap_from_current(ClassList)
-      if (j < N) &
-         call Drop_down(ClassList%next, j+1, N)
-   end subroutine Drop_down
-
-   ! Проверка того, стоит ли менять местами текущего учащегося со следующим.
-   pure logical function Swap(Current)
-      type(student), intent(in)  :: Current
-
-      Swap = .false.
-      if (Current%Year < Current%next%Year) then
-         Swap = .true.
-      else if (Current%Year == Current%next%Year) then
-         if (Current%Surname > Current%next%Surname) then
-            Swap = .true.
-         else if (Current%Surname==Current%next%Surname .and. Current%Initials>Current%next%Initials) then
-            Swap = .true.
-         end if
+      if (Boys_From_SPB%year >= stud1%year) then
+         stud3 = stud2
+         stud2 = stud1
+         stud1 = Boys_From_SPB
+      else if (Boys_From_SPB%year >= stud2%year) then
+         stud3 = stud2
+         stud2 = Boys_From_SPB
+      else if (Boys_From_SPB%year >= stud3%year) then
+         stud3 = Boys_From_SPB
       end if
-   end function Swap
 
-   ! Перестановка местами двух эелементов списка, начиная с текущего.
-   pure subroutine Swap_from_current(Current)
-      type(student), pointer  :: Current
+      if (associated(Boys_From_SPB%next)) then
+         call Look_at_youngests(Boys_From_SPB%next, stud1, stud2, stud3)
+      else
+         stud1%next => Null()
+         stud2%next => Null()
+         stud3%next => Null()
+      end if
 
-      type(student), pointer  :: tmp_stud
-               
-      tmp_stud       => Current%next
-      Current%next   => Current%next%next
-      tmp_stud%next  => Current
-      Current        => tmp_stud
-   end subroutine Swap_from_current
+   end subroutine
 
 end module group_process
