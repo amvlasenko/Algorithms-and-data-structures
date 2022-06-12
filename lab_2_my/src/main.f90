@@ -1,13 +1,13 @@
 program lab_2_12
    use Environment
-   use Source_Process
-   use Source_IO
+   use String_Process
+   use String_IO
 
    implicit none
    character(:), allocatable :: F1, F2, F3
    integer                   :: i = 1, result
-   type(SourceLine), pointer :: haystack  => Null()  
-   type(SourceLine), pointer :: needle   => Null()
+   type(String), pointer :: haystack  => Null()  
+   type(String), pointer :: needle   => Null()
 
    F1 = "../data/haystack.txt"
    F2 = "../data/needle.txt"

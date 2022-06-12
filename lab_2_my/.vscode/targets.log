@@ -6,9 +6,8 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
- 
 
-# Make data base, printed on Sat Jun  4 20:16:05 2022
+# Make data base, printed on Sun Jun 12 13:11:25 2022
 
 # Variables
 
@@ -41,7 +40,7 @@ __CFBundleIdentifier = com.microsoft.VSCode
 # environment
 INFOPATH = /opt/homebrew/share/info:
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/my/p7shlyls4vbdr9qgwtdl1z5h0000gn/T/vscode-ipc-c6a6fb20-5e14-485f-a02e-513cfa40d1f7.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/my/p7shlyls4vbdr9qgwtdl1z5h0000gn/T/vscode-ipc-5d7b89d1-0846-4bbd-a011-8b08f804ddb1.sock
 # environment
 VSCODE_CWD = /
 # environment
@@ -55,11 +54,11 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.43vyAevcs9/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.6BDvlCWpga/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
-DISPLAY = /private/tmp/com.apple.launchd.R66RKF7SUP/org.xquartz:0
+DISPLAY = /private/tmp/com.apple.launchd.r7pi5JSv1s/org.xquartz:0
 # makefile (from `Makefile', line 3)
 FOPT = -O3 -ftree-vectorize -fopt-info-vec
 # environment
@@ -83,7 +82,7 @@ VSCODE_CODE_CACHE_PATH = /Users/amvlasenko/Library/Application Support/Code/Cach
 # environment
 LOGNAME = amvlasenko
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
@@ -153,7 +152,7 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 9777
+VSCODE_PID = 826
 # variable set hash-table stats:
 # Load=71/1024=7%, Rehash=0, Collisions=1/110=1%
 
@@ -200,10 +199,10 @@ all:
 # Load=8/32=25%, Rehash=0, Collisions=1/23=4%
 #  commands to execute (from `Makefile', line 6):
 	$(FC) $(FFLAGS) -c src/environment.f90 -J obj/ -o obj/environment.o
-	$(FC) $(FFLAGS) -c src/source_io.f90 -J obj/ -o obj/source_io.o
-	$(FC) $(FFLAGS) $(FOPT) -c src/source_process.f90 -J obj/ -o obj/source_process.o
+	$(FC) $(FFLAGS) -c src/string_io.f90 -J obj/ -o obj/string_io.o
+	$(FC) $(FFLAGS) $(FOPT) -c src/string_process.f90 -J obj/ -o obj/string_process.o
 	$(FC) $(FFLAGS) $(FOPT) -c src/main.f90 -I obj/ -o obj/main.o
-	$(FC) $(FFLAGS) $(FOPT) -o bin/app ./obj/environment.o ./obj/source_io.o ./obj/source_process.o ./obj/main.o
+	$(FC) $(FFLAGS) $(FOPT) -o bin/app ./obj/environment.o ./obj/string_io.o ./obj/string_process.o ./obj/main.o
 	
 
 # Not a target:
@@ -215,7 +214,7 @@ all:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-04 20:14:46
+#  Last modified 2022-06-12 12:56:52
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -258,6 +257,6 @@ clean:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Sat Jun  4 20:16:05 2022
+# Finished Make data base on Sun Jun 12 13:11:25 2022
 
  
