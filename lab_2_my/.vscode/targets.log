@@ -6,8 +6,9 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
+ 
 
-# Make data base, printed on Sun Jun 12 13:11:25 2022
+# Make data base, printed on Sun Jun 12 14:47:01 2022
 
 # Variables
 
@@ -40,7 +41,7 @@ __CFBundleIdentifier = com.microsoft.VSCode
 # environment
 INFOPATH = /opt/homebrew/share/info:
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/my/p7shlyls4vbdr9qgwtdl1z5h0000gn/T/vscode-ipc-5d7b89d1-0846-4bbd-a011-8b08f804ddb1.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/my/p7shlyls4vbdr9qgwtdl1z5h0000gn/T/vscode-ipc-479e23b8-850e-46c2-ade0-ae7cb8de1252.sock
 # environment
 VSCODE_CWD = /
 # environment
@@ -82,7 +83,7 @@ VSCODE_CODE_CACHE_PATH = /Users/amvlasenko/Library/Application Support/Code/Cach
 # environment
 LOGNAME = amvlasenko
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
@@ -113,6 +114,7 @@ MAKE_COMMAND := /Library/Developer/CommandLineTools/usr/bin/make
 TMPDIR = /var/folders/my/p7shlyls4vbdr9qgwtdl1z5h0000gn/T/
 # automatic
 *F = $(notdir $*)
+ 
 # environment
 VSCODE_IPC_HOOK = /Users/amvlasenko/Library/Application Support/Code/1.67.2-main.sock
 # makefile
@@ -257,6 +259,6 @@ clean:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Sun Jun 12 13:11:25 2022
+# Finished Make data base on Sun Jun 12 14:47:01 2022
 
  
