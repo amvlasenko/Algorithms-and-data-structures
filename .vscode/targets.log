@@ -7,7 +7,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 
 # This program built for i386-apple-darwin11.3.0
 
-# Make data base, printed on Sun Jun 19 18:51:54 2022
+# Make data base, printed on Sun Jun 19 18:53:40 2022
 
 # Variables
 
@@ -24,15 +24,15 @@ VSCODE_LOG_NATIVE = false
 # automatic
 @F = $(notdir $@)
 # makefile
-CURDIR := /Users/amvlasenko/Documents/fortran/lab_4
+CURDIR := /Users/amvlasenko/Documents/fortran
 # makefile
 SHELL = /bin/sh
 # environment
 VSCODE_NLS_CONFIG = {"locale":"ru","availableLanguages":{},"_languagePackSupport":true}
 # environment
 _ = /usr/bin/make
-# makefile (from `Makefile', line 1)
-MAKEFILE_LIST :=  Makefile
+# makefile
+MAKEFILE_LIST := 
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
@@ -40,13 +40,11 @@ __CFBundleIdentifier = com.microsoft.VSCode
 # environment
 INFOPATH = /opt/homebrew/share/info:
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/my/p7shlyls4vbdr9qgwtdl1z5h0000gn/T/vscode-ipc-1af343d7-d5ec-4d56-821f-4d74b981d3f6.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/my/p7shlyls4vbdr9qgwtdl1z5h0000gn/T/vscode-ipc-ccc38553-68bc-4bf6-b8b4-c100b9ca8944.sock
 # environment
 VSCODE_CWD = /
 # environment
 PATH = /opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin
-# makefile (from `Makefile', line 2)
-FFLAGS = -Wall -std=f2008ts -fimplicit-none -Wno-maybe-uninitialized -static-libgfortran -flto
 # environment
 VSCODE_LOG_STACK = false
 # environment
@@ -59,12 +57,10 @@ SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.6BDvlCWpga/Listeners
 %F = $(notdir $%)
 # environment
 DISPLAY = /private/tmp/com.apple.launchd.r7pi5JSv1s/org.xquartz:0
-# makefile (from `Makefile', line 3)
-FOPT = -O3 -ftree-vectorize -fopt-info-vec
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
-PWD = /Users/amvlasenko/Documents/fortran/lab_4
+PWD = /Users/amvlasenko/Documents/fortran
 # environment
 HOMEBREW_CELLAR = /opt/homebrew/Cellar
 # environment
@@ -99,10 +95,8 @@ SHLVL = 1
 MAKE_VERSION := 3.81
 # environment
 USER = amvlasenko
-# makefile (from `Makefile', line 1)
-FC = gfortran
 # makefile
-.DEFAULT_GOAL := all
+.DEFAULT_GOAL := 
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
 # default
@@ -154,7 +148,7 @@ LANG = C
 # environment
 VSCODE_PID = 56561
 # variable set hash-table stats:
-# Load=71/1024=7%, Rehash=0, Collisions=1/110=1%
+# Load=68/1024=7%, Rehash=0, Collisions=1/89=1%
 
 # Pattern-specific Variable Values
 
@@ -162,9 +156,9 @@ VSCODE_PID = 56561
 
 # Directories
 
-# . (device 16777231, inode 13197426): 9 files, no impossibilities.
+# . (device 16777231, inode 12239795): 25 files, no impossibilities.
 
-# 9 files, no impossibilities in 1 directories.
+# 25 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -172,38 +166,14 @@ VSCODE_PID = 56561
 
 # Files
 
+# Not a target:
 all:
 #  Command-line target.
-#  Implicit rule search has not been done.
-#  Implicit/static pattern stem: `'
+#  Implicit rule search has been done.
 #  File does not exist.
-#  File has been updated.
-#  Needs to be updated (-q is set).
-# automatic
-# @ := all
-# automatic
-# % := 
-# automatic
-# * := 
-# automatic
-# + := 
-# automatic
-# | := 
-# automatic
-# < := 
-# automatic
-# ^ := 
-# automatic
-# ? := 
+#  File has not been updated.
 # variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=1/23=4%
-#  commands to execute (from `Makefile', line 6):
-	$(FC) $(FFLAGS) -c src/environment.f90 -J obj/ -o obj/environment.o
-	$(FC) $(FFLAGS) -c src/matrix_io.f90 -J obj/ -o obj/matrix_io.o
-	$(FC) $(FFLAGS) $(FOPT) -c src/matrix_process.f90 -J obj/ -o obj/matrix_process.o
-	$(FC) $(FFLAGS) $(FOPT) -c src/main.f90 -I obj/ -o obj/main.o
-	$(FC) $(FFLAGS) $(FOPT) -o bin/app ./obj/environment.o ./obj/matrix_io.o ./obj/matrix_process.o ./obj/main.o
-	
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 # Not a target:
 .SUFFIXES:
@@ -213,10 +183,21 @@ all:
 
 # Not a target:
 Makefile:
+#  A default, MAKEFILES, or -include/sinclude makefile.
 #  Implicit rule search has been done.
-#  Last modified 2022-06-12 18:18:10
+#  File does not exist.
 #  File has been updated.
-#  Successfully updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+makefile:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
@@ -226,37 +207,31 @@ Makefile:
 #  Modification time never checked.
 #  File has not been updated.
 
-run:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  commands to execute (from `Makefile', line 17):
-	cd ./bin; ./app;
-	cat bin/output.txt
-	
-
-clean:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  commands to execute (from `Makefile', line 13):
-	rm -rf obj/*
-	rm -rf bin/*
-	
+# Not a target:
+GNUmakefile:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
 # files hash-table stats:
-# Load=6/1024=1%, Rehash=0, Collisions=0/20=0%
+# Load=6/1024=1%, Rehash=0, Collisions=0/17=0%
 # VPATH Search Paths
 
 # No `vpath' search paths.
 
 # No general (`VPATH' variable) search path.
 
-# # of strings in strcache: 1
-# # of strcache buffers: 1
-# strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
-# strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
+# # of strings in strcache: 0
+# # of strcache buffers: 0
+# strcache size: total = 0 / max = 0 / min = 4096 / avg = 0
+# strcache free: total = 0 / max = 0 / min = 4096 / avg = 0
 
-# Finished Make data base on Sun Jun 19 18:51:54 2022
+# Finished Make data base on Sun Jun 19 18:53:40 2022
 
  
+make: *** No rule to make target `all'.  Stop.
+

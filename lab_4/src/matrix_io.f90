@@ -6,25 +6,28 @@ module Matrix_IO
    integer, parameter                 :: max_len = 1024
 
    type element
-      integer                 :: Aij = 0
-      integer                 :: i   = 0
-      integer                 :: j   = 0
-      type(element), pointer  :: Next  => Null()
+      integer                 :: Aij
+      integer                 :: i
+      integer                 :: j
+      type(element), pointer  :: next  => Null()
    end type element
 
 contains
-   function Read_Matrix(InputFile) result(response)
+   function Read_Matrix(InputFile, M, N) result(elem)
       character(*), intent(in)   :: InputFile
-      type(element), pointer     :: response
-      integer                    :: In, M, N
+      integer, intent(inout)     :: M, N
+      type(element), pointer     :: elem
+      integer                    :: In
 
       open (file=InputFile, encoding=E_, newunit=In)
          M = getM(In, 0)
          N = getN(In)
-         !response => Read_element(In, 0)
       close (In)
-      print *, M
-      print *, N
+
+      open (file=InputFile, encoding=E_, newunit=In)
+         elem => getMatrix(In, 7, 1)
+      close (In)
+
 
    end function
 
@@ -60,106 +63,106 @@ contains
       N = acc
    end function
 
-   ! recursive function Read_element(In, acc) result(elem)
-   !    integer, intent(in)           :: In
-   !    integer, optional, intent(in) :: acc
-   !    type(element), pointer        :: elem
-   !    character(MAX_LEN, CH_)       :: input_element
-   !    integer                       :: IO, M, N, countSymbols = 0
+   recursive function getMatrix(In, N, M) result(elem)
+      integer, intent(in)                  :: In, N, M
+      type(element), pointer               :: elem
+      integer                              :: IO
+      integer                              :: input_string(N)
 
+      read (In, '('//N-1//'(i1, 1x), i1)', iostat=IO) input_string
+      call Handle_IO_status(IO, "read character")
 
-   !    read (In, '(a)', iostat=IO) input_element
-    
+      if (IO == 0) then
+         elem => parseString(In, input_string, N, M, 1)
+      else
+         elem => Null()
+      end if
 
-   !    !Находим количество элементов в строке
-   !    if (countSymbols == 0) then
-   !       countSymbols = parsString(trim(input_element), len_trim(input_element))
-   !    end if
+   end function getMatrix
+ 
+   recursive function parseString(In, input_string, N, M, i) result(elem)
+      type(element), pointer  :: elem
+      integer, intent(in)     :: In
+      integer, intent(in)     :: input_string(:), M, N, i
 
-   !    !Находим количество строк
-   !    call Handle_IO_status(IO, "read character")
-   !    if (IO == 0) then
-   !       elem => Read_element(In, acc+1)
-   !    else
-   !       Print *, "M: ", M
-   !       Print *, "N: ", N
-   !    end if
-       
+      allocate (elem)
+      if (input_string(i) /= 0) then
+         elem%Aij = input_string(i)   
+         elem%i = M
+         elem%j = i
+         if (i < N) then
+            elem%next => parseString(In, input_string, N, M, i+1)
+         end if
+      else if (i < N) then
+         elem => parseString(In, input_string, N, M, i+1)
+      else if (i == N) then
+         elem => getMatrix(In, N, M+1)
+      end if
+   end function
+
+   recursive subroutine printer(matrix)
+      type(element), pointer :: matrix
+
+      write(*, *) "Aij: ", matrix%Aij, "i: ", matrix%i, "j: ", matrix%j
+      
+      if (associated(matrix%next)) then
+         call printer(matrix%next)
+      else
+         write(*, '(/a)', advance="no")
+      end if
+   end subroutine
+
+   subroutine outputMatrix(output_file, matrix, M, N)
+      type(element), pointer     :: matrix
+      character(*), intent(in)   :: output_file
+      integer, intent(in)        :: M, N
+      integer                    :: Out = 0
+
+      open (file=Output_File, encoding=E_, position="rewind", newunit=Out)
+         call outputString(Out, matrix, 1, N)
+      close (Out)
+
+   end subroutine
+
+   recursive subroutine outputString(Out, matrix, M, N)
+      integer, intent(in)        :: Out
+      type(element), pointer     :: matrix
+      integer, intent(in)        :: M, N
+      integer                    :: IO, i
+
+      call outputElement(Out, matrix, M, N, 1)
+   
+   end subroutine
+
+   recursive subroutine outputElement(Out, matrix, M, N, i)
+      integer, intent(in)        :: Out
+      type(element), pointer     :: matrix
+      integer, intent(in)        :: M, N, i
+      integer                    :: IO
      
 
-   ! end function
+      if (i == matrix%j .and. matrix%i == M) then
+         write(Out, '(i1, 1x)', advance="no") matrix%Aij
+         if (i < N .and. associated(matrix%next)) then
+            call outputElement(Out, matrix%next, M, N, i+1)
+         else if (i < N) then
+            call outputElement(Out, matrix, M, N, i+1)
+         end if
+      else
+         write(Out, '(i1, 1x)', advance="no") 0
+         if (i < N) then
+            call outputElement(Out, matrix, M, N, i+1)
+         end if
+      end if
 
-   ! function parsString(string, len) result(countSymbols)
-   !    integer, intent(in)              :: len
-   !    ! character(len, CH_), intent(in)  :: string
-   !    ! character(1, CH_)                :: space = " "
-   !    integer  :: i, countSymbols, acc = 1
-         
-   !    do i = 1, len
-   !      if (string(i:i) == space) then
-   !       acc = acc + 1
-   !      end if
-   !    end do
+      if (i == N .and. associated(matrix%next)) then
+         write(Out, *)
+         call outputString(Out, matrix, M+1, N)
+      else if (i == N .and. matrix%i == M+1) then
+         write(Out, *)
+         call outputElement(Out, matrix, M+1, N, 1)
+      end if
 
-   !    countSymbols = acc
-
-   ! end function
-!   ! Чтение строки из файла
-!    function Read_element(In) result(str)
-!       integer, intent(in)                  :: In
-!       integer                              :: IO, lenght_element
-!       type(element), pointer                :: str
-!       character(MAX_LEN, CH_)              :: input_element
-
-!       read (In, "(a)", iostat=IO) input_element
-!       call Handle_IO_status(IO, "read character")
-     
-!       lenght_element = len_trim(input_element)
-
-!       print *, trim(input_element)
-      
-!       if ( lenght_element >= 1 ) then
-!          str => Create_element_List(trim(input_element), 1, lenght_element)
-!       else
-!          str => Null()
-!       end if
-!    end function Read_element
-
-!    ! Рекурсивное чтение исходной строки и перевод ее в модель element
-!    recursive function Create_element_List(input_str, index, count) result(str)
-!       character(*, kind=CH_), intent(in)   :: input_str
-!       integer(I_), intent(in)              :: index, count
-!       type(element), pointer                :: str
-      
-!       allocate (str)
-
-!       str%char = input_str(index:index)
-!       str%next => Null()
-      
-!       if ( index < count ) &
-!          str%next => Create_element_List(input_str, index+1, count)
-!    end function Create_element_List
-
-!    recursive subroutine Print_Str(Str)
-!       type(element), pointer :: str
-
-!       write(*, '(a)', advance="no") str%char
-      
-!       if (associated(str%next)) then
-!          call Print_Str(str%next)
-!       else
-!          write(*, '(/a)', advance="no")
-!       end if
-!    end subroutine Print_Str
-
-!    subroutine Output_Result(output_file, R)
-!       character(*), intent(in)   :: output_file
-!       integer, intent(in)        :: R
-!       integer                    :: Out = 0
-
-!       open (file=output_file, encoding=E_, newunit=Out, position='rewind')
-!          write (Out, "(a, i4)") "Index: ", R
-!       close (Out)
-!    end subroutine Output_Result
+   end subroutine
 
 end module Matrix_IO
