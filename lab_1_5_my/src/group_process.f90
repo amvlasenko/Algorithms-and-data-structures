@@ -25,29 +25,45 @@ contains
       end if
 
    end subroutine
-   
-   !Три ссылки студ_Н, три else if
 
    pure recursive subroutine Look_at_youngests(Boys_From_SPB, stud1, stud2, stud3)
       type(student), pointer, intent(inout)     :: Boys_From_SPB, stud1, stud2, stud3
-      
-      if (Boys_From_SPB%year >= stud1%year) then
-         stud3 = stud2
-         stud2 = stud1
-         stud1 = Boys_From_SPB
-      else if (Boys_From_SPB%year >= stud2%year) then
-         stud3 = stud2
-         stud2 = Boys_From_SPB
-      else if (Boys_From_SPB%year >= stud3%year) then
-         stud3 = Boys_From_SPB
+   
+      if (associated(stud1) .and. (.not. associated(stud2)) .and. (.not. associated(stud3))) then
+         if (Boys_From_SPB%year >= stud1%year) then
+            stud2 => stud1
+            stud1 => Boys_From_SPB
+         else
+            stud2 => Boys_From_SPB
+         end if
+      else if (associated(stud1) .and. associated(stud2) .and. (.not. associated(stud3))) then
+         if (Boys_From_SPB%year >= stud1%year) then
+            stud3 => stud2
+            stud2 => stud1
+            stud1 => Boys_From_SPB
+         else if (Boys_From_SPB%year >= stud2%year) then
+            stud3 => stud2
+            stud2 => Boys_From_SPB
+         else
+            stud3 => Boys_From_SPB
+         end if
+      else if (associated(stud1) .and. associated(stud2) .and. associated(stud3)) then
+         if (Boys_From_SPB%year >= stud1%year) then
+            stud3 => stud2
+            stud2 => stud1
+            stud1 => Boys_From_SPB
+         else if (Boys_From_SPB%year >= stud2%year) then
+            stud3 => stud2
+            stud2 => Boys_From_SPB
+         else if (Boys_From_SPB%year >= stud3%year) then
+            stud3 => Boys_From_SPB
+         end if
+      else
+         stud1 => Boys_From_SPB
       end if
-
+      
       if (associated(Boys_From_SPB%next)) then
          call Look_at_youngests(Boys_From_SPB%next, stud1, stud2, stud3)
-      else
-         stud1%next => Null()
-         stud2%next => Null()
-         stud3%next => Null()
       end if
 
    end subroutine

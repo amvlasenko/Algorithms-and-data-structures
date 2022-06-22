@@ -74,4 +74,25 @@ contains
          call Output_student(Out, Stud%next)
       end if
    end subroutine Output_student
+
+   subroutine outputResponse(Output_File, Stud, Position, List_Name)
+      character(*), intent(in)   :: Output_File, Position
+      character(*), optional, intent(in) :: List_name
+      integer                    :: Out
+      type(student), intent(in)  :: Stud
+      integer  :: IO
+      character(:), allocatable  :: format
+
+      format = '(2(a, 1x), i4, 1x, a, 1x, a)'
+
+      open (file=Output_File, encoding=E_, position=Position, newunit=Out)
+         if(present(List_name)) then
+            write (out, '(/a)') List_Name
+         end if
+         write (Out, format, iostat=IO) Stud%Surname, Stud%Initials, Stud%Year, &
+         Stud%Registration, Stud%Gender
+      close (Out)
+
+      call Handle_IO_status(IO, "writing student")
+   end subroutine
 end module Group_IO 

@@ -5,7 +5,8 @@ program lab_1_5
 
    implicit none
    character(:), allocatable           :: input_file, output_file
-   type(student), pointer              :: Group, Boys_From_SPB, stud1, stud2, stud3
+   type(student), pointer              :: Group => Null(), Boys_From_SPB => Null(), stud1 => Null(),&
+    stud2 => Null(), stud3 => Null()
    integer                             :: amount = 0
 
 
@@ -14,7 +15,7 @@ program lab_1_5
 
    Group => Read_class_list(input_file)
 
-   allocate(stud1, stud2, stud3)
+   !allocate(stud1, stud2, stud3)
       
    if (Associated(Group)) then
       call Output_class_list(output_file, Group, "rewind", "Исходный список:")
@@ -23,13 +24,13 @@ program lab_1_5
          call Output_class_list(output_file, Boys_From_SPB, "append", "Молодые список:")
          call Look_at_youngests(Boys_From_SPB, stud1, stud2, stud3)
          if(Associated(stud1)) then
-            call Output_class_list(output_file, stud1, "append", "Самые молодые:")
+            call outputResponse(output_file, stud1, "append", "Самые молодые:")
          end if
          if(Associated(stud2)) then
-            call Output_class_list(output_file, stud2, "append")
+            call outputResponse(output_file, stud2, "append")
          end if
          if(Associated(stud3)) then
-         call Output_class_list(output_file, stud3, "append")
+         call outputResponse(output_file, stud3, "append")
          end if
       end if
    end if

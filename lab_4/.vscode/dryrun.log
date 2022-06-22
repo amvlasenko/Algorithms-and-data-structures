@@ -1,9 +1,9 @@
 make --dry-run --always-make --keep-going --print-directory
-make: Entering directory `/Users/amvlasenko/Documents/fortran/lab_4'
+make: Entering directory `/Users/amvlasenko/Documents/lab_4'
 gfortran -Wall -std=f2008ts -fimplicit-none -Wno-maybe-uninitialized -static-libgfortran -flto -c src/environment.f90 -J obj/ -o obj/environment.o
 gfortran -Wall -std=f2008ts -fimplicit-none -Wno-maybe-uninitialized -static-libgfortran -flto -c src/matrix_io.f90 -J obj/ -o obj/matrix_io.o
 gfortran -Wall -std=f2008ts -fimplicit-none -Wno-maybe-uninitialized -static-libgfortran -flto -O3 -ftree-vectorize -fopt-info-vec -c src/matrix_process.f90 -J obj/ -o obj/matrix_process.o
 gfortran -Wall -std=f2008ts -fimplicit-none -Wno-maybe-uninitialized -static-libgfortran -flto -O3 -ftree-vectorize -fopt-info-vec -c src/main.f90 -I obj/ -o obj/main.o
 gfortran -Wall -std=f2008ts -fimplicit-none -Wno-maybe-uninitialized -static-libgfortran -flto -O3 -ftree-vectorize -fopt-info-vec -o bin/app ./obj/environment.o ./obj/matrix_io.o ./obj/matrix_process.o ./obj/main.o
-make: Leaving directory `/Users/amvlasenko/Documents/fortran/lab_4'
+make: Leaving directory `/Users/amvlasenko/Documents/lab_4'
  
